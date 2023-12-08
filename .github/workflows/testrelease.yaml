@@ -32,7 +32,7 @@ jobs:
               continue;
             fi
             
-            for col in LATEST PRE_RELEASE DRAFT ONLY_TAG; do
+            for col in PRE_RELEASE DRAFT ONLY_TAG; do
                 if [[ "${!col,,}" == "true" ]]; then
                     eval "$col=true"
                 else
