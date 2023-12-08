@@ -27,7 +27,7 @@ jobs:
               echo "CSV header line ignoring";
               continue;
             fi
-            
+            REPO=$( echo $REPO | sed 's/"//g')
             for col in PRE_RELEASE DRAFT ONLY_TAG; do
                 if [[ "${!col,,}" == "true" ]]; then
                     eval "$col=true"
@@ -68,7 +68,7 @@ jobs:
               -H "Authorization: Bearer ${{ secrets.TOKEN }}" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
               -d "$data" \ 
-              "https://api.github.com/repos/shubham17998/$(echo $REPO | sed 's/"//g')/releases"
+              "https://api.github.com/repos/shubham17998/${REPO}/releases"
           done < "${{ inputs.CSV_FILE }}"
       - uses: 8398a7/action-slack@v3
         with:
