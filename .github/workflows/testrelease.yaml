@@ -61,7 +61,6 @@ jobs:
               -H "Authorization: Bearer ${{ secrets.TOKEN }}" \
               https://api.github.com/repos/shubham17998/$REPO/git/tags \
               -d "$data"
-
           done < "${{ inputs.CSV_FILE }}"
       - uses: 8398a7/action-slack@v3
         with:
