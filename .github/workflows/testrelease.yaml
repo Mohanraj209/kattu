@@ -51,9 +51,9 @@ jobs:
             
             # Construct data payload for creating tag
             data='{
-              "ref": "refs/tags/'$TAG'",
-              "sha": "HEAD",
-              "message": "'$BODY'"
+              "ref": 'refs/tags/'$TAG'',
+              "sha": 'HEAD',
+              "message": ''$BODY''
             }'
 
             # Debugging output
