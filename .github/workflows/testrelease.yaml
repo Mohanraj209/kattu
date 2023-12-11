@@ -50,7 +50,7 @@ jobs:
             echo "DRAFT: $DRAFT "
             echo "-----------------------------"
             
-            # Construct data payload for tag
+            # Construct data payload
               data='{
                 "tag_name": '$TAG',
                 "name": '$TAG',
