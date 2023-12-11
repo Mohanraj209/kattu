@@ -49,10 +49,8 @@ jobs:
             echo "PRE_RELEASE: $PRE_RELEASE"
             echo "DRAFT: $DRAFT "
             echo "-----------------------------"
-
-            # Conditionally execute curl command based on ONLY_TAG value
-            if [[ "$ONLY_TAG" == "true" ]]; then
-              # Construct data payload for tag
+            
+            # Construct data payload for tag
               data='{
                 "tag_name": '$TAG',
                 "name": '$TAG',
@@ -62,6 +60,8 @@ jobs:
                 "prerelease": '$PRE_RELEASE'
               }'
 
+            # Conditionally execute curl command based on ONLY_TAG value
+            if [[ "$ONLY_TAG" == "true" ]]; then
               # Debugging output
               echo "DEBUG: Data payload for tag:"
               echo "$data"
@@ -75,17 +75,6 @@ jobs:
                 https://api.github.com/repos/shubham17998/$REPO/tags \
                 -d "$data"
             else
-              # Construct data payload for release
-              data='{
-                "tag_name": '$TAG',
-                "name": '$TAG',
-                "target_commitish": '$BRANCH',
-                "body": '$BODY',
-                "draft": '$DRAFT',
-                "make_latest": '$LATEST',
-                "prerelease": '$PRE_RELEASE'
-              }'
-
               # Debugging output
               echo "DEBUG: Data payload for release:"
               echo "$data"
