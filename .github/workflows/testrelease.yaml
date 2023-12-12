@@ -90,8 +90,8 @@ jobs:
                 exit 1
               fi
             else
-            # Construct data payload for release
-            data='{
+              # Construct data payload for release
+              data='{
                 "tag_name": '$TAG',
                 "name": '$TAG',
                 "target_commitish": '$BRANCH',
