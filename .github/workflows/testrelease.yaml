@@ -86,7 +86,7 @@ jobs:
                 "target_commitish": "'"$BRANCH"'",
                 "body": "'"$BODY"'",
                 "draft": '$DRAFT',
-                "prerelease": '$PRE_RELEASE'
+                "prerelease": '$PRE_RELEASE
               }'
               
               # Debugging output
