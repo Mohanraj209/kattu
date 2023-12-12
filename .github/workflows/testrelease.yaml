@@ -21,8 +21,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: install jq
-        run: sudo apt install jq
       - name: Create Releases from CSV
         run: |
           while IFS=, read -r REPO TAG ONLY_TAG BRANCH LATEST BODY PRE_RELEASE DRAFT MESSAGE OBJECT_SHA; do
