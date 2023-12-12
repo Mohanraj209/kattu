@@ -53,9 +53,9 @@ jobs:
             # Construct data payload for tag
 
             data='{
-              "tag": "'$TAG'",
-              "object": "'$OBJECT_SHA'",
-              "message": "'$MESSAGE'",
+              "tag": "'"$TAG"'",
+              "message": "'"$MESSAGE"'",
+              "object": "'"$OBJECT_SHA"'",
               "type": "commit"
             }'
 
