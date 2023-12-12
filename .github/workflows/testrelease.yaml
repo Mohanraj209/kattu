@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Create Releases from CSV
         run: |
-          while IFS=, read -r REPO TAG ONLY_TAG BRANCH LATEST BODY PRE_RELEASE DRAFT MESSAGE OBJECT_SHA; do
+          while IFS=, read -r REPO TAG ONLY_TAG BRANCH LATEST BODY PRE_RELEASE DRAFT OBJECT_SHA MESSAGE ; do
             if [[ "$REPO" == "REPO" ]]; then
               echo "CSV header line ignoring";
               continue;
@@ -50,8 +50,8 @@ jobs:
             echo "BODY: $BODY"
             echo "PRE_RELEASE: $PRE_RELEASE"
             echo "DRAFT: $DRAFT "
-            echo "MESSAGE: $MESSAGE"
             echo "OBJECT_SHA: $OBJECT_SHA"
+            echo "MESSAGE: $MESSAGE"
             echo "-----------------------------"
             
             # Construct data payload for tag
