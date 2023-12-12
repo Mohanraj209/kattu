@@ -24,20 +24,22 @@ jobs:
       - name: Create Releases from CSV
         run: |
           while IFS=, read -r REPO TAG ONLY_TAG BRANCH LATEST BODY PRE_RELEASE DRAFT OBJECT_SHA MESSAGE; do
-            if [[ "$REPO" == \"REPO\" ]]; then
+            if [[ "$REPO" == "REPO" ]]; then
               echo "CSV header line ignoring";
               continue;
             fi
-            REPO=$( echo $REPO | sed 's/"//g')
 
-            echo "REPO === $REPO "
-            for col in PRE_RELEASE DRAFT ONLY_TAG; do
-                if [[ "${!col,,}" == "true" ]]; then
-                    eval "$col=true"
-                else
-                    eval "$col=false"
-                fi
-            done
+            REPO=$(echo "$REPO" | tr -d '"')
+
+            echo "REPO === $REPO"
+
+            PRE_RELEASE=$(echo "$PRE_RELEASE" | tr '[:upper:]' '[:lower:]')
+            DRAFT=$(echo "$DRAFT" | tr '[:upper:]' '[:lower:]')
+            ONLY_TAG=$(echo "$ONLY_TAG" | tr '[:upper:]' '[:lower:]')
+
+            [[ "$PRE_RELEASE" == "true" ]] && PRE_RELEASE=true || PRE_RELEASE=false
+            [[ "$DRAFT" == "true" ]] && DRAFT=true || DRAFT=false
+            [[ "$ONLY_TAG" == "true" ]] && ONLY_TAG=true || ONLY_TAG=false
 
             # Output key-value pairs
             echo "REPO: $REPO"
@@ -79,10 +81,10 @@ jobs:
 
               # Construct data payload for release
               data='{
-                "tag_name": '$TAG',
-                "name": '$TAG',
-                "target_commitish": '$BRANCH',
-                "body": '$BODY',
+                "tag_name": "$TAG",
+                "name": "$TAG",
+                "target_commitish": "$BRANCH",
+                "body": "$BODY",
                 "draft": '$DRAFT',
                 "prerelease": '$PRE_RELEASE'
               }'
