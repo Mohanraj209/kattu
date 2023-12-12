@@ -52,8 +52,8 @@ jobs:
             
             # Construct data payload for tag
             data='{
-              "ref": "refs/tags/'$TAG'",
-              "sha": "'$BRANCH'"
+              "ref": "refs/tags/'"$TAG"'",
+              "sha": "'"$BRANCH"'"
             }'
 
             # Conditionally execute curl command based on ONLY_TAG value
