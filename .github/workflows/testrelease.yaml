@@ -48,6 +48,8 @@ jobs:
             echo "BODY: $BODY"
             echo "PRE_RELEASE: $PRE_RELEASE"
             echo "DRAFT: $DRAFT "
+            echo "MESSAGE: $MESSAGE "
+            echo "OBJECT_SHA: $OBJECT_SHA"
             echo "-----------------------------"
             
             # Construct data payload for tag
