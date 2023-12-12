@@ -52,8 +52,10 @@ jobs:
             
             # Construct data payload for tag
             data='{
-              "ref": "refs/tags/"'$TAG'",
-              "sha": "'$BRANCH'"
+              "tag": "'"$TAG"'",
+              "message": "'"$BODY"'",
+              "object": "'"$OBJECT_SHA"'",
+              "type": "commit"
             }'
 
             # Conditionally execute curl command based on ONLY_TAG value
