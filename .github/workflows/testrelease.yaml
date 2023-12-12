@@ -23,23 +23,21 @@ jobs:
         uses: actions/checkout@v3
       - name: Create Releases from CSV
         run: |
-          while IFS=, read -r REPO TAG ONLY_TAG BRANCH LATEST BODY PRE_RELEASE DRAFT OBJECT_SHA MESSAGE ; do
-            if [[ "$REPO" == "REPO" ]]; then
+          while IFS=, read -r REPO TAG ONLY_TAG BRANCH LATEST BODY PRE_RELEASE DRAFT OBJECT_SHA MESSAGE; do
+            if [[ "$REPO" == \"REPO\" ]]; then
               echo "CSV header line ignoring";
               continue;
             fi
+            REPO=$( echo $REPO | sed 's/"//g')
 
-            REPO=$(echo "$REPO" | tr -d '"')
-
-            echo "REPO === $REPO"
-
-            PRE_RELEASE=$(echo "$PRE_RELEASE" | tr '[:upper:]' '[:lower:]')
-            DRAFT=$(echo "$DRAFT" | tr '[:upper:]' '[:lower:]')
-            ONLY_TAG=$(echo "$ONLY_TAG" | tr '[:upper:]' '[:lower:]')
-
-            [[ "$PRE_RELEASE" == "true" ]] && PRE_RELEASE=true || PRE_RELEASE=false
-            [[ "$DRAFT" == "true" ]] && DRAFT=true || DRAFT=false
-            [[ "$ONLY_TAG" == "true" ]] && ONLY_TAG=true || ONLY_TAG=false
+            echo "REPO === $REPO "
+            for col in PRE_RELEASE DRAFT ONLY_TAG; do
+                if [[ "${!col,,}" == "true" ]]; then
+                    eval "$col=true"
+                else
+                    eval "$col=false"
+                fi
+            done
 
             # Output key-value pairs
             echo "REPO: $REPO"
@@ -49,47 +47,36 @@ jobs:
             echo "LATEST: $LATEST"
             echo "BODY: $BODY"
             echo "PRE_RELEASE: $PRE_RELEASE"
-            echo "DRAFT: $DRAFT "
+            echo "DRAFT: $DRAFT"
             echo "OBJECT_SHA: $OBJECT_SHA"
             echo "MESSAGE: $MESSAGE"
             echo "-----------------------------"
-            
-            # Construct data payload for tag
-
-            data='{
-              "tag": "'"$TAG"'",
-              "message": "'"$MESSAGE"'",
-              "object": "'"$OBJECT_SHA"'",
-              "type": "commit"
-            }'
 
             # Conditionally execute curl command based on ONLY_TAG value
             if [[ "$ONLY_TAG" == "true" ]]; then
 
+              # Construct data payload for tag
+              data='{
+                "tag": "'"$TAG"'",
+                "message": "'"$MESSAGE"'",
+                "object": "'"$OBJECT_SHA"'",
+                "type": "commit"
+              }'
+
               # Debugging output
               echo "DEBUG: Data payload for tag:"
               echo "data: $data"
-   
+
               # Run curl command for tag
-              response=$(curl -L \
+              curl -L \
                 -X POST \
                 -H "Accept: application/vnd.github+json" \
                 -H "Authorization: Bearer ${{ secrets.TOKEN }}" \
                 -H "X-GitHub-Api-Version: 2022-11-28" \
-                -w "%{http_code}" \
-                --output /dev/null \
                 https://api.github.com/repos/shubham17998/$REPO/git/tags \
-                -d "$data")
-
-              # Check the HTTP response code
-              if [[ "$response" -eq 201 ]]; then
-                echo "Tag created successfully."
-              else
-                echo "Error creating tag. HTTP response code: $response"
-                # Add additional error handling or exit the script
-                exit 1
-              fi
+                -d "$data"
             else
+
               # Construct data payload for release
               data='{
                 "tag_name": '$TAG',
@@ -99,30 +86,19 @@ jobs:
                 "draft": '$DRAFT',
                 "prerelease": '$PRE_RELEASE'
               }'
-
+              
               # Debugging output
               echo "DEBUG: Data payload for release:"
               echo "data: $data"
 
               # Run curl command for release
-              response=$(curl -L \
+              curl -L \
                 -X POST \
                 -H "Accept: application/vnd.github+json" \
                 -H "Authorization: Bearer ${{ secrets.TOKEN }}" \
                 -H "X-GitHub-Api-Version: 2022-11-28" \
-                -w "%{http_code}" \
-                --output /dev/null \
                 https://api.github.com/repos/shubham17998/$REPO/releases \
-                -d "$data")
-
-              # Check the HTTP response code
-              if [[ "$response" -eq 201 ]]; then
-                echo "release created successfully."
-              else
-                echo "Error creating release. HTTP response code: $response"
-                # Add additional error handling or exit the script
-                exit 1
-              fi            
+                -d "$data"
             fi
           done < "${{ inputs.CSV_FILE }}"
       - uses: 8398a7/action-slack@v3
