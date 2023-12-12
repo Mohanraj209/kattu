@@ -63,31 +63,57 @@ jobs:
               "type": "commit"
             }'
 
-            # Debugging output
-            echo "DEBUG: Data payload for tag:"
-            echo "data: $data"
-
             # Conditionally execute curl command based on ONLY_TAG value
             if [[ "$ONLY_TAG" == "true" ]]; then
 
+              # Debugging output
+              echo "DEBUG: Data payload for tag:"
+              echo "data: $data"
+   
               # Run curl command for tag
-              curl -L \
+              response=$(curl -L \
                 -X POST \
                 -H "Accept: application/vnd.github+json" \
                 -H "Authorization: Bearer ${{ secrets.TOKEN }}" \
                 -H "X-GitHub-Api-Version: 2022-11-28" \
+                -w "%{http_code}" \
+                --output /dev/null \
                 https://api.github.com/repos/shubham17998/$REPO/git/tags \
-                -d "$data"
+                -d "$data")
+
+              # Check the HTTP response code
+              if [[ "$response" -eq 201 ]]; then
+                echo "Tag created successfully."
+              else
+                echo "Error creating tag. HTTP response code: $response"
+                # Add additional error handling or exit the script
+                exit 1
+              fi
             else
-            
+
+              # Debugging output
+              echo "DEBUG: Data payload for release:"
+              echo "data: $data"
+
               # Run curl command for release
-              curl -L \
+              response=$(curl -L \
                 -X POST \
                 -H "Accept: application/vnd.github+json" \
                 -H "Authorization: Bearer ${{ secrets.TOKEN }}" \
                 -H "X-GitHub-Api-Version: 2022-11-28" \
+                -w "%{http_code}" \
+                --output /dev/null \
                 https://api.github.com/repos/shubham17998/$REPO/releases \
-                -d "$data"
+                -d "$data")
+
+              # Check the HTTP response code
+              if [[ "$response" -eq 201 ]]; then
+                echo "release created successfully."
+              else
+                echo "Error creating release. HTTP response code: $response"
+                # Add additional error handling or exit the script
+                exit 1
+              fi            
             fi
           done < "${{ inputs.CSV_FILE }}"
       - uses: 8398a7/action-slack@v3
