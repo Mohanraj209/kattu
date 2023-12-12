@@ -90,6 +90,15 @@ jobs:
                 exit 1
               fi
             else
+            # Construct data payload for release
+            data='{
+                "tag_name": '$TAG',
+                "name": '$TAG',
+                "target_commitish": '$BRANCH',
+                "body": '$BODY',
+                "draft": '$DRAFT',
+                "prerelease": '$PRE_RELEASE'
+              }'
 
               # Debugging output
               echo "DEBUG: Data payload for release:"
