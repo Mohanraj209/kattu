@@ -62,7 +62,7 @@ jobs:
                 "tag": "'"$TAG"'",
                 "message": "'"$MESSAGE"'",
                 "object": "'"$OBJECT_SHA"'",
-                "type": "commit"
+                "type": "'"commit"'"
               }'
 
               # Debugging output
