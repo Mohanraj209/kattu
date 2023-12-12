@@ -51,11 +51,12 @@ jobs:
             echo "-----------------------------"
             
             # Construct data payload for tag
+
             data='{
-              "tag": '$TAG',
-              "message": '$MESSAGE',
-              "object": '$OBJECT_SHA',
-              "type": 'commit'
+              "tag": "'$TAG'",
+              "message": "'$MESSAGE'",
+              "object": "'$OBJECT_SHA'",
+              "type": "commit"
             }'
 
             # Conditionally execute curl command based on ONLY_TAG value
