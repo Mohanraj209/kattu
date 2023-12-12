@@ -63,12 +63,12 @@ jobs:
               "type": "commit"
             }'
 
+            # Debugging output
+            echo "DEBUG: Data payload for tag:"
+            echo "data: $data"
+
             # Conditionally execute curl command based on ONLY_TAG value
             if [[ "$ONLY_TAG" == "true" ]]; then
-            
-              # Debugging output
-              echo "DEBUG: Data payload for tag:"
-              echo "$data"
 
               # Run curl command for tag
               curl -L \
@@ -79,10 +79,7 @@ jobs:
                 https://api.github.com/repos/shubham17998/$REPO/git/tags \
                 -d "$data"
             else
-              # Debugging output
-              echo "DEBUG: Data payload for release:"
-              echo "$data"
-
+            
               # Run curl command for release
               curl -L \
                 -X POST \
