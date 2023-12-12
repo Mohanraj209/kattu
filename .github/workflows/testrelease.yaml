@@ -56,8 +56,8 @@ jobs:
 
             data='{
               "tag": "'$TAG'",
-              "message": "'$OBJECT_SHA'",
-              "object": "'$MESSAGE'",
+              "object": "'$OBJECT_SHA'",
+              "message": "'$MESSAGE'",
               "type": "commit"
             }'
 
