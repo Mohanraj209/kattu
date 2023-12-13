@@ -21,9 +21,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Fetch the latest commit
+        run:  |
+          OBJECT_SHA=$(git rev-parse HEAD)  # Use the latest commit SHA
+          echo "OBJECT_SHA: $OBJECT_SHA"
       - name: Create Releases from CSV
         run: |
-          while IFS=, read -r REPO TAG ONLY_TAG BRANCH LATEST BODY PRE_RELEASE DRAFT OBJECT_SHA MESSAGE; do
+          while IFS=, read -r REPO TAG ONLY_TAG BRANCH LATEST BODY PRE_RELEASE DRAFT MESSAGE; do
             if [[ "$REPO" == "REPO" ]]; then
               echo "CSV header line ignoring";
               continue;
@@ -36,7 +40,6 @@ jobs:
             PRE_RELEASE=$(echo "$PRE_RELEASE" | tr '[:upper:]' '[:lower:]')
             DRAFT=$(echo "$DRAFT" | tr '[:upper:]' '[:lower:]')
             ONLY_TAG=$(echo "$ONLY_TAG" | tr '[:upper:]' '[:lower:]')
-            OBJECT_SHA: $(git rev-parse HEAD)
 
             [[ "$PRE_RELEASE" == "true" ]] && PRE_RELEASE=true || PRE_RELEASE=false
             [[ "$DRAFT" == "true" ]] && DRAFT=true || DRAFT=false
@@ -51,7 +54,6 @@ jobs:
             echo "BODY: $BODY"
             echo "PRE_RELEASE: $PRE_RELEASE"
             echo "DRAFT: $DRAFT"
-            echo "OBJECT_SHA: $OBJECT_SHA"
             echo "MESSAGE: $MESSAGE"
             echo "-----------------------------"
 
