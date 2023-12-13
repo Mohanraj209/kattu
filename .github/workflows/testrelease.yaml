@@ -21,10 +21,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Fetch the latest commit
-        run:  |
-          OBJECT_SHA=$(git rev-parse HEAD)  # Use the latest commit SHA
-          echo "OBJECT_SHA: $OBJECT_SHA"
       - name: Create Releases from CSV
         run: |
           while IFS=, read -r REPO TAG ONLY_TAG BRANCH LATEST BODY PRE_RELEASE DRAFT MESSAGE; do
@@ -57,6 +53,10 @@ jobs:
             echo "MESSAGE: $MESSAGE"
             echo "-----------------------------"
 
+            # Fetch the latest commit
+            OBJECT_SHA=$(git rev-parse "refs/remotes/origin/$BRANCH")
+            echo "Latest commit on branch $BRANCH: $OBJECT_SHA"
+            
             # Conditionally execute curl command based on ONLY_TAG value
             if [[ "$ONLY_TAG" == "true" ]]; then
               
