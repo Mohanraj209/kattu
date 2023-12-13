@@ -56,18 +56,6 @@ jobs:
 
             # Conditionally execute curl command based on ONLY_TAG value
             if [[ "$ONLY_TAG" == "true" ]]; then
-
-              # Construct data payload for tag
-              data='{
-                  "tag": "'"$TAG"'",
-                  "message": "'"$MESSAGE"'",
-                  "object": "'"$OBJECT_SHA"'",
-                  "type": "commit"
-              }'
-
-              # Debugging output
-              echo "DEBUG: Data payload for tag:"
-              echo "data: $data"
               
               # Create a tag
               curl -X POST \
