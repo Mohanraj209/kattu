@@ -79,6 +79,8 @@ jobs:
                   -d "$data"); then
                   echo "Tag created successfully."
                   echo "GitHub API Response: $response"
+                  echo "git tag: "
+                  git tag -l $TAG
               else
                   echo "Error creating tag."
                   echo "GitHub API Response: $response"
