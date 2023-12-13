@@ -80,7 +80,7 @@ jobs:
                   echo "Tag created successfully."
                   echo "GitHub API Response: $response"
                   echo "git tag: "
-                  git tag -l $TAG
+                  git tag
               else
                   echo "Error creating tag."
                   echo "GitHub API Response: $response"
