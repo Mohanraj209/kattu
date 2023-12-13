@@ -54,7 +54,8 @@ jobs:
             echo "-----------------------------"
 
             # Fetch the latest commit
-            OBJECT_SHA=$(git rev-parse "refs/remotes/origin/$BRANCH")
+            REPO_URL="https://github.com/shubham17998/$REPO.git"
+            OBJECT_SHA=$(git ls-remote "$REPO_URL" "refs/heads/$BRANCH" | cut -f1)
             echo "Latest commit on branch $BRANCH: $OBJECT_SHA"
             
             # Conditionally execute curl command based on ONLY_TAG value
